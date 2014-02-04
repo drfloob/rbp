@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                 livereload: true
             },
             js: {
-                files: ['js/**/*']
+                files: ['js/**/*', 'bower_components/**/*']
             }
         },
         connect: {
@@ -36,5 +36,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask('livereload', ['watch:js']);
     grunt.registerTask('server', ['connect:server']);
-
+    
 };
