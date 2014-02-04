@@ -41,7 +41,7 @@ define(['react', 'cortex'], function(React) {
     var App = React.createClass({
         render: function() {
             return <ul>
-                {this.props.todos.map(function(t) {
+                {this.props.data.map(function(t) {
                     return <Item key={t.getValue()} val={t} />; 
                 })}
             </ul>;

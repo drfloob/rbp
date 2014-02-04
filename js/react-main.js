@@ -15,8 +15,8 @@ require.config({
 
 require(['react', 'jsx!views/app', 'data/main', 'cortex'], function(React, App, Data, Cortex) {
 
-    var todosTex = new Cortex(Data, function() {
+    var DataCortex = new Cortex(Data, function() {
         app.setState();
     });
-    app = React.renderComponent(App({todos: todosTex}), document.getElementById('app'));
+    app = React.renderComponent(App({data: DataCortex}), document.getElementById('app'));
 });
