@@ -13,15 +13,10 @@ require.config({
     }
 });
 
-require(['react', 'jsx!views/app'], function(React, App) {
-    //--------------------------------------------------------------------------------
-    // Cortex Demo Code
-    var app;
-    var todos = [1,2,3];
-    var todosTex = new Cortex(todos, function() {
+require(['react', 'jsx!views/app', 'data/main', 'cortex'], function(React, App, Data, Cortex) {
+
+    var todosTex = new Cortex(Data, function() {
         app.setState();
     });
-    //--------------------------------------------------------------------------------
-
     app = React.renderComponent(App({todos: todosTex}), document.getElementById('app'));
 });
