@@ -13,10 +13,11 @@ require.config({
     }
 });
 
-require(['react', 'jsx!views/app', 'data/main', 'cortex'], function(React, App, Data, Cortex) {
+require(['react', 'jsx!views/app', 'data/main', 'cortex', 'router'], function(React, App, Data, Cortex, Router) {
 
     var DataCortex = new Cortex(Data, function() {
         app.setState();
     });
     app = React.renderComponent(App({data: DataCortex}), document.getElementById('app'));
+    Router.init();
 });

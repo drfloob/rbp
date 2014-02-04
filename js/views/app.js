@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-define(['react', 'cortex'], function(React) {
+define(['react', 'router'], function(React, router) {
 
     var Item = React.createClass({
 
@@ -39,6 +39,9 @@ define(['react', 'cortex'], function(React) {
     });
 
     var App = React.createClass({
+        componentWillMount: function() {
+            router.on(router.ON.ALL, function(){console.log('app found /');});
+        },
         render: function() {
             return <ul>
                 {this.props.data.map(function(t) {
