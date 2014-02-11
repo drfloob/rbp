@@ -1,34 +1,34 @@
 /** @jsx React.DOM */
 
 define(['react', 'router', 'data/main'], function(React, router, data) {
+    'use strict';
 
-    var DELAY = 5000;
+    var DELAY = 2000;
 
-    function changeItem() {
-        var node = data.latest.findNode(this);
+    function changeItem(comp) {
+        var node = comp.props.model;
         console.log('adding 3 to ', node.data());
         node.data(node.data() + 3);
     };
 
-    function removeItem() {
-        var node = data.latest.findNode(this);
-        console.log('triggered removal', node.data());
+    function removeItem(comp) {
+        var node = comp.props.model;
+        console.log('$ triggered removal', node.data());
         node.remove();
     };
 
     var Item = React.createClass({
-        shouldComponentUpdate: function(newProps) {
-            console.log('Item', this.props.model.data(), 
-                        'shouldComponentUpdate', newProps.model.modified);
-            return newProps.model.modified;
-        },
         componentWillMount: function() {
-            console.log('mounting item', this.props.model.data());
-
+            console.log('^ mounting', this.props.model.data());
             var model = this.props.model,
-            f = (model.data() < 4 ? changeItem : removeItem).bind(model);
-
+            f = _.partial(model.data() < 4 ? changeItem : removeItem, this);
             setTimeout(f, DELAY * Math.random());
+        },
+        componentWillUnmount: function() {
+            console.log('$ unmounting', this.props.model.data());
+        },
+        componentWillUpdate:function () {
+            console.log('  updating', this.props.model.data());
         },
         render: function() {
             return <li>{this.props.model.data()}</li>;
@@ -36,10 +36,6 @@ define(['react', 'router', 'data/main'], function(React, router, data) {
     });
 
     var App = React.createClass({
-        shouldComponentUpdate: function(newProps) {
-            console.log('app should update', newProps.model.modified);
-            return newProps.model.modified;
-        },
         componentWillMount: function() {
             router.on(router.ON.ALL, function(){console.log('app found /');});
         },

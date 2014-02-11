@@ -17,10 +17,10 @@ require.config({
 
 require(['react', 'jsx!views/app', 'data/main', 'router'], function(React, App, Data, Router) {
 
-    var app = React.renderComponent(App({model: Data.latest}), document.getElementById('app'));
+    var app = React.renderComponent(App({model: Data}), document.getElementById('app'));
 
-    Data.latest.on('afterUpdate', function(newModel) {
-        app.setProps({'model':  Data.latest});
+    Data.on('afterUpdate', function(newModel) {
+        app.setProps({'model':  newModel});
     });
 
     Router.init();
