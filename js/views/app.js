@@ -1,51 +1,52 @@
 /** @jsx React.DOM */
 
-define(['react', 'router'], function(React, router) {
+define(['react', 'router', 'data/main'], function(React, router, data) {
+
+    var DELAY = 5000;
+
+    function changeItem() {
+        var node = data.latest.findNode(this);
+        console.log('adding 3 to ', node.data());
+        node.data(node.data() + 3);
+    };
+
+    function removeItem() {
+        var node = data.latest.findNode(this);
+        console.log('triggered removal', node.data());
+        node.remove();
+    };
 
     var Item = React.createClass({
-
-        componentWillMount: function(){
-            console.log('mounting', this.props.val.getValue());
-
-            //--------------------------------------------------------------------------------
-            // EXAMPLE of Cortex Usage
-            var self = this;
-
-            // modify an entry at a random time btw seconds 1 and 4
-            if (self.props.val.getValue() < 4) {
-                setTimeout(function() {
-                    self.props.val.set(self.props.val.getValue() + 3);
-                }, 4000 * Math.random());
-            }
-
-            // delete an entry at a random time btw seconds 5 and 8
-            setTimeout(function() {
-                console.log('timeout from', self.props.val.getValue());
-                self.props.val.delete();
-            }, 4000 + 4000 * Math.random())
-
-            //--------------------------------------------------------------------------------
+        shouldComponentUpdate: function(newProps) {
+            console.log('Item', this.props.model.data(), 
+                        'shouldComponentUpdate', newProps.model.modified);
+            return newProps.model.modified;
         },
-        componentWillUpdate: function(nextProps) {
-            console.log('updating', this.props.val.getValue(), 'to', nextProps.val.getValue());
-        },
-        componentWillUnmount: function() {
-            console.log('unmounting', this.props.val.getValue());
-        },
+        componentWillMount: function() {
+            console.log('mounting item', this.props.model.data());
 
+            var model = this.props.model,
+            f = (model.data() < 4 ? changeItem : removeItem).bind(model);
+
+            setTimeout(f, DELAY * Math.random());
+        },
         render: function() {
-            return <li>{this.props.val.getValue()}</li>;
+            return <li>{this.props.model.data()}</li>;
         }
     });
 
     var App = React.createClass({
+        shouldComponentUpdate: function(newProps) {
+            console.log('app should update', newProps.model.modified);
+            return newProps.model.modified;
+        },
         componentWillMount: function() {
             router.on(router.ON.ALL, function(){console.log('app found /');});
         },
         render: function() {
             return <ul>
-                {this.props.data.map(function(t) {
-                    return <Item key={t.getValue()} val={t} />; 
+                {this.props.model.root().children().map(function(t) {
+                    return <Item key={t.data()} model={t} />;
                 })}
             </ul>;
         }

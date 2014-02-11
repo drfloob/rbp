@@ -6,6 +6,6 @@
             "director": "~1.2.2",
             "requirejs": "~2.1.10",
             "require-jsx": "",
-            "cortex": "mquan/cortex"
+            "chinchilla": "drfloob/chinchilla"
 	}
 }
